@@ -16,15 +16,21 @@ sock.bind((ip, port))
 
 # 소켓을 수신 상태로 대기
 sock.listen()
+try:
+    while True:
+        # Publisher의 연결을 받아들임
+        conn, addr = sock.accept()
 
-# Publisher의 연결을 받아들임
-conn, addr = sock.accept()
+        # 데이터 수신
+        data = conn.recv(1024).decode()
 
-# 데이터 수신
-data = conn.recv(1024).decode()
+        print(data)
 
-# 아두이노에 데이터 전송
-ser.write(data.encode())
+        # 아두이노에 데이터 전송
+        ser.write(data.encode())
+
+except KeyboardInterrupt:
+    print('중지됐음.')
 
 # 소켓 닫기
 conn.close()
